@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker\Generator as Faker;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Candidate>
@@ -17,8 +18,8 @@ class CandidateFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'surname' => fake()->name(),
+            'name' => $this->faker->firstName,
+            'surname' => $this->faker->lastName,
         ];
     }
 }
