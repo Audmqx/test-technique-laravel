@@ -16,8 +16,8 @@ class CandidateTest extends TestCase
     public function test_that_candidate_model_and_table_exist(): void
     {
         $seedCandidate = [
-			'name' => 'Maxim',
-            'surname' => 'Iangaev'
+			'name' => (new Name('Maxim'))->display(),
+            'surname' => (new Surname('Iangaev'))->display(),
 		];
 
         $candidate = Candidate::factory()->create($seedCandidate);
@@ -26,21 +26,22 @@ class CandidateTest extends TestCase
         $this->assertDatabaseHas('candidates', $seedCandidate);
     }
 
-    public function test_that_name_is_valid(): void
+    public static function invalidNames(): array
     {
-        $name = new Name('Maxim');
-        $this->assertSame('Maxim', $name->display());
-
-        $this->expectException(InvalidNameException::class);
-        new Name('Maxim 6');
+        return [
+            ['Maxim 9'],
+            ['a@'],
+            ['123'],
+            ['jean-{']
+        ];
     }
 
-    public function test_that_is_surname_is_encapsulated(): void
+    /**
+     * @dataProvider invalidNames
+     */
+    public function test_throws_an_exception_for_invalid_names(string $input): void
     {
-        $name = new Surname('Iangaev');
-        $this->assertSame('Iangaev', $name->display());
-
         $this->expectException(InvalidNameException::class);
-        new Name('Iangaev#');
+        new Name($input);
     }
 }

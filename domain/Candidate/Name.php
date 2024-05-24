@@ -16,7 +16,7 @@ class Name
     private function validate()
     {
         $validator = Validator::make(['value' => $this->value], [
-            'value' => ['required', 'string', 'alpha_dash ', 'min:2', 'max:255'],
+            'value' => ['required', 'string', 'alpha', 'min:2', 'max:255'],
         ]);
 
         if($validator->fails()){
