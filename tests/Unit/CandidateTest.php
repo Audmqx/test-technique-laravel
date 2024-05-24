@@ -6,7 +6,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Candidate;
-use Domain\Candidate\Name;
+use Domain\Candidate\{Name, Surname};
 use Domain\Candidate\Exceptions\InvalidNameException;
 
 class CandidateTest extends TestCase
@@ -33,5 +33,14 @@ class CandidateTest extends TestCase
 
         $this->expectException(InvalidNameException::class);
         new Name('Maxim 6');
+    }
+
+    public function test_that_is_surname_is_encapsulated(): void
+    {
+        $name = new Surname('Iangaev');
+        $this->assertSame('Iangaev', $name->display());
+
+        $this->expectException(InvalidNameException::class);
+        new Name('Iangaev#');
     }
 }
