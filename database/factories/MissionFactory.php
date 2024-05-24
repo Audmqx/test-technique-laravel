@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Candidate;
 use DateTime;
 use Illuminate\Support\Carbon;
+use App\Monads\Maybe;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Mission>
@@ -22,12 +23,15 @@ class MissionFactory extends Factory
         $startDate = $this->faker->dateTimeBetween('-1 year', '+1 year');
         $endDate = $this->faker->dateTimeBetween($startDate, '+2 years');
 
-        $candidate = Candidate::WithoutActiveMissions()->first();
-        $candidate_id = null;
-        if($this->isActualDateBetweenMission($startDate, $endDate)){
-            $candidate_id = $candidate->id;
-        }
-        
+        $candidate = Maybe::just(Candidate::WithoutActiveMissions()->first())->getOrElse(null);
+
+        $candidate_id = match (true) {
+            $this->isActualDateBetweenMission($startDate, $endDate) => $candidate?->id,
+            $this->isActualDateAfterMission($endDate) => $candidate?->id,
+            $this->isActualDateBeforeMission($startDate) => null,
+            default => null,
+        };
+
         return [
             'start_date' => $startDate->format('Y-m-d'),
             'end_date' =>  $endDate->format('Y-m-d'),
@@ -39,5 +43,15 @@ class MissionFactory extends Factory
     private function isActualDateBetweenMission(DateTime $startDate,DateTime $endDate): bool
     {
         return Carbon::now()->between($startDate, $endDate);
+    }
+
+    private function isActualDateAfterMission(DateTime $endDate): bool
+    {
+        return Carbon::now()->isAfter($endDate);
+    }
+
+    private function isActualDateBeforeMission(DateTime $startDate): bool
+    {
+        return Carbon::now()->isBefore($startDate);
     }
 }

@@ -26,7 +26,7 @@ class CandidateTest extends TestCase
         $this->assertDatabaseHas('candidates', $seedCandidate);
     }
 
-     /** @phpstan-ignore-next-line */
+    /** @phpstan-ignore-next-line */
     public static function invalidNames(): array
     {
         return [

@@ -11,6 +11,9 @@ class Candidate extends Model
 {
     use HasFactory;
     
+    /**
+     * @return Collection<int, Candidate>
+     */
     public static function WithoutActiveMissions(): Collection
     {
         return self::whereDoesntHave('missions', function (Builder $query) {
@@ -18,6 +21,9 @@ class Candidate extends Model
         })->get();
     }
 
+    /**
+     * @return HasMany<Mission>
+     */
     public function missions(): HasMany
     {
         return $this->hasMany(Mission::class);

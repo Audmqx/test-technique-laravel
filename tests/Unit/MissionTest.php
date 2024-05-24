@@ -7,6 +7,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\{Mission, Candidate};
 use Illuminate\Support\Carbon;
+use App\Monads\Maybe;
 
 class MissionTest extends TestCase
 {
@@ -26,22 +27,43 @@ class MissionTest extends TestCase
         $this->assertDatabaseHas('missions', $seedMission);
     }
 
-    public function test_that_factory_is_seeding_with_valid_relationship()
+    public function test_that_factory_is_seeding_with_valid_candidate_id(): void
     {
         $this->seed();
 
         foreach(Mission::all() as $mission){
-            if($this->isActualDateBetweenMission($mission)){
+            $startDate = Carbon::createFromFormat('Y-m-d', $mission->start_date);
+            $endDate = Carbon::createFromFormat('Y-m-d', $mission->end_date);
+
+            if($this->isActualDateBetweenMission($startDate, $endDate)){
                 $this->assertNotNull($mission->candidate_id);
+            }
+
+            if($this->isActualDateAfterMission($endDate)){
+                $this->assertNotNull($mission->candidate_id);
+            }
+
+            if($this->isActualDateBeforeMission($startDate)){
+                $this->assertNull($mission->candidate_id);
             }
         }
     }
 
-    private function isActualDateBetweenMission(Mission $mission): bool
+    private function isActualDateBetweenMission(?Carbon $startDate, ?Carbon $endDate): bool
     {
-        $startDate = Carbon::createFromFormat('Y-m-d', $mission->start_date);
-        $endDate = Carbon::createFromFormat('Y-m-d', $mission->end_date);
-        
+        /** @phpstan-ignore-next-line */
         return Carbon::now()->between($startDate, $endDate);
+    }
+
+    private function isActualDateAfterMission(?Carbon $endDate): bool
+    {
+        /** @phpstan-ignore-next-line */
+        return Carbon::now()->isAfter($endDate);
+    }
+
+    private function isActualDateBeforeMission(?Carbon $startDate): bool
+    {  
+        /** @phpstan-ignore-next-line */
+        return Carbon::now()->isBefore($startDate);
     }
 }
