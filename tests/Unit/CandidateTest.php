@@ -7,6 +7,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Candidate;
 use Domain\Candidate\Name;
+use Domain\Candidate\Exceptions\InvalidNameException;
 
 class CandidateTest extends TestCase
 {
@@ -25,9 +26,12 @@ class CandidateTest extends TestCase
         $this->assertDatabaseHas('candidates', $seedCandidate);
     }
 
-    public function test_that_name_is_encapsulated(): void
+    public function test_that_name_is_valid(): void
     {
         $name = new Name('Maxim');
         $this->assertSame('Maxim', $name->display());
+
+        $this->expectException(InvalidNameException::class);
+        new Name('Maxim 6');
     }
 }
