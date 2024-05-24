@@ -23,11 +23,11 @@ class MissionFactory extends Factory
         $startDate = $this->faker->dateTimeBetween('-1 year', '+1 year');
         $endDate = $this->faker->dateTimeBetween($startDate, '+2 years');
 
-        $candidate = Maybe::just(Candidate::WithoutActiveMissions()->first())->getOrElse(null);
+        $candidate = Maybe::just(Candidate::WithoutMissions())->getOrElse(Candidate::factory()->create());
 
-        $candidate_id = match (true) {
-            $this->isActualDateBetweenMission($startDate, $endDate) => $candidate?->id,
-            $this->isActualDateAfterMission($endDate) => $candidate?->id,
+        $candidate = match (true) {
+            $this->isActualDateBetweenMission($startDate, $endDate) => $candidate,
+            $this->isActualDateAfterMission($endDate) => $candidate,
             $this->isActualDateBeforeMission($startDate) => null,
             default => null,
         };
@@ -36,7 +36,7 @@ class MissionFactory extends Factory
             'start_date' => $startDate->format('Y-m-d'),
             'end_date' =>  $endDate->format('Y-m-d'),
             'title' => $this->faker->jobTitle(),
-            'candidate_id' => $candidate_id,
+            'candidate_id' => $candidate,
         ];
     }
 

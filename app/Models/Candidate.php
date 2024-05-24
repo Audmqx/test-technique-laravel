@@ -12,6 +12,14 @@ class Candidate extends Model
     use HasFactory;
     
     /**
+     * @return \App\Models\Candidate|null
+     */
+    public static function WithoutMissions(): Candidate|null
+    {
+        return self::WhereDoesntHave('missions')->inRandomOrder()->first();
+    }
+
+    /**
      * @return Collection<int, Candidate>
      */
     public static function WithoutActiveMissions(): Collection
@@ -20,6 +28,7 @@ class Candidate extends Model
             $query->where('end_date', '>=', Carbon::now());
         })->get();
     }
+
 
     /**
      * @return HasMany<Mission>
