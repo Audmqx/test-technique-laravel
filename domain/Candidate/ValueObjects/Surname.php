@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Domain\Candidate;
+namespace Domain\Candidate\ValueObjects;
 
 use Illuminate\Support\Facades\Validator;
 use Domain\Candidate\Exceptions\InvalidNameException;
