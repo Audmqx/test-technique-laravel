@@ -6,7 +6,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Candidate;
-use Domain\Candidate\{Name, Surname};
+use Domain\Candidate\ValueObjects\{Name, Surname};
 use Domain\Candidate\Exceptions\InvalidNameException;
 
 class CandidateTest extends TestCase
