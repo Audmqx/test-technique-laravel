@@ -14,17 +14,23 @@ class CandidateTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_that_candidate_model_and_table_exist(): void
+    private array $seedCandidate;
+    private Candidate $candidate;
+
+    public function setUp(): void
     {
-        $seedCandidate = [
+        parent::setUp();
+        $this->seedCandidate = [
 			'name' => (new Name('Maxim'))->display(),
             'surname' => (new Surname('Iangaev'))->display(),
 		];
+        $this->candidate = Candidate::factory()->create($this->seedCandidate);
+    }
 
-        $candidate = Candidate::factory()->create($seedCandidate);
-
-        $this->assertModelExists($candidate);
-        $this->assertDatabaseHas('candidates', $seedCandidate);
+    public function test_that_candidate_model_and_table_exist(): void
+    {
+        $this->assertModelExists($this->candidate);
+        $this->assertDatabaseHas('candidates', $this->seedCandidate);
     }
 
     /** @phpstan-ignore-next-line */
@@ -49,17 +55,10 @@ class CandidateTest extends TestCase
 
     public function test_that_transforms_candidate_model_to_json(): void
     {
-        $seedCandidate = [
-			'name' => (new Name('Maxim'))->display(),
-            'surname' => (new Surname('Iangaev'))->display(),
-		];
-
-        $candidate = Candidate::factory()->create($seedCandidate);
-
-        $resource = new CandidateResource($candidate);
+        $resource = new CandidateResource($this->candidate);
 
         $expectedJson = [
-            'id' => $candidate->id,
+            'id' => $this->candidate->id,
             'name' => 'Maxim',
             'surname' => 'Iangaev',
         ];
