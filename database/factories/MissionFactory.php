@@ -24,11 +24,12 @@ class MissionFactory extends Factory
         $endDate = $this->faker->dateTimeBetween($startDate, '+2 years');
 
         $candidate = Maybe::just(Candidate::WithoutMissions())->getOrElse(Candidate::factory()->create());
-
+        
         $candidate = match (true) {
             $this->isActualDateBetweenMission($startDate, $endDate) => $candidate,
             $this->isActualDateAfterMission($endDate) => $candidate,
             $this->isActualDateBeforeMission($startDate) => null,
+            $this->isActualDateSameAsMissionBeggining($startDate) => $candidate,
             default => null,
         };
 
@@ -40,7 +41,12 @@ class MissionFactory extends Factory
         ];
     }
 
-    private function isActualDateBetweenMission(DateTime $startDate,DateTime $endDate): bool
+    private function isActualDateSameAsMissionBeggining(DateTime $startDate): bool
+    {
+        return Carbon::now()->isSameDay($startDate);
+    }
+
+    private function isActualDateBetweenMission(DateTime $startDate, DateTime $endDate): bool
     {
         return Carbon::now()->between($startDate, $endDate);
     }

@@ -27,26 +27,43 @@ class MissionTest extends TestCase
         $this->assertDatabaseHas('missions', $seedMission);
     }
 
+    // public function test_that_dates_are_encapsulated(): void
+    // {
+    //     // $startDate = new startDate('2024-06-01');
+    //     // $endDate = new startDate('2024-06-01');
+
+    //     // $this->assert($startDate, startDate::class);
+    // }
+
     public function test_that_factory_is_seeding_with_valid_candidate_id(): void
     {
         $this->seed();
 
         foreach(Mission::all() as $mission){
-            $startDate = Carbon::createFromFormat('Y-m-d', $mission->start_date);
-            $endDate = Carbon::createFromFormat('Y-m-d', $mission->end_date);
-
-            if($this->isActualDateBetweenMission($startDate, $endDate)){
-                $this->assertNotNull($mission->candidate_id);
-            }
-
-            if($this->isActualDateAfterMission($endDate)){
-                $this->assertNotNull($mission->candidate_id);
-            }
-
-            if($this->isActualDateBeforeMission($startDate)){
-                $this->assertNull($mission->candidate_id);
-            }
+            $this->validateCandidateId($mission);
         }
+    }
+
+    private function validateCandidateId(Mission $mission): void
+    {
+        $startDate = Carbon::createFromFormat('Y-m-d', $mission->start_date);
+        $endDate = Carbon::createFromFormat('Y-m-d', $mission->end_date);
+
+        if ($this->isActualDateSameAsMissionBeggining($startDate) ||
+            $this->isActualDateBetweenMission($startDate, $endDate) ||
+            $this->isActualDateAfterMission($endDate)) {
+            $this->assertNotNull($mission->candidate_id);
+        }
+
+        if ($this->isActualDateBeforeMission($startDate)) {
+            $this->assertNull($mission->candidate_id);
+        }
+    } 
+
+    private function isActualDateSameAsMissionBeggining(?Carbon $startDate): bool
+    {
+        /** @phpstan-ignore-next-line */
+        return Carbon::now()->isSameDay($startDate);
     }
 
     private function isActualDateBetweenMission(?Carbon $startDate, ?Carbon $endDate): bool
