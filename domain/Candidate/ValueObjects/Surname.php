@@ -16,7 +16,7 @@ class Surname
     private function validate()
     {
         $validator = Validator::make(['value' => $this->value], [
-            'value' => ['required', 'string', 'alpha', 'min:2', 'max:255'],
+            'value' => ['required', 'string', 'regex:/^[\p{L}\p{M}\s]+$/u', 'min:2', 'max:255'],
         ]);
 
         if($validator->fails()){
