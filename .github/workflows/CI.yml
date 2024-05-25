@@ -43,7 +43,7 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: vendor/bin/phpunit
+      run: php artisan test
 
     - name: Run Code Analysis
       run: vendor/bin/phpstan analyse --level=max
