@@ -27,14 +27,6 @@ class MissionTest extends TestCase
         $this->assertDatabaseHas('missions', $seedMission);
     }
 
-    // public function test_that_dates_are_encapsulated(): void
-    // {
-    //     // $startDate = new startDate('2024-06-01');
-    //     // $endDate = new startDate('2024-06-01');
-
-    //     // $this->assert($startDate, startDate::class);
-    // }
-
     public function test_that_factory_is_seeding_with_valid_candidate_id(): void
     {
         $this->seed();

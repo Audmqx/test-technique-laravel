@@ -26,10 +26,10 @@ class MissionFactory extends Factory
         $candidate = Maybe::just(Candidate::WithoutMissions())->getOrElse(Candidate::factory()->create());
         
         $candidate = match (true) {
+            $this->isActualDateSameAsMissionBeggining($startDate) => $candidate,
             $this->isActualDateBetweenMission($startDate, $endDate) => $candidate,
             $this->isActualDateAfterMission($endDate) => $candidate,
             $this->isActualDateBeforeMission($startDate) => null,
-            $this->isActualDateSameAsMissionBeggining($startDate) => $candidate,
             default => null,
         };
 
