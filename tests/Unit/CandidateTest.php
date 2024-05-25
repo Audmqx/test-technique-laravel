@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Candidate;
 use Domain\Candidate\ValueObjects\{Name, Surname};
 use Domain\Candidate\Exceptions\InvalidNameException;
+use App\Http\Resources\CandidateResource;
 
 class CandidateTest extends TestCase
 {
@@ -44,5 +45,25 @@ class CandidateTest extends TestCase
     {
         $this->expectException(InvalidNameException::class);
         new Name($input);
+    }
+
+    public function test_that_transforms_candidate_model_to_json(): void
+    {
+        $seedCandidate = [
+			'name' => (new Name('Maxim'))->display(),
+            'surname' => (new Surname('Iangaev'))->display(),
+		];
+
+        $candidate = Candidate::factory()->create($seedCandidate);
+
+        $resource = new CandidateResource($candidate);
+
+        $expectedJson = [
+            'id' => $candidate->id,
+            'name' => 'Maxim',
+            'surname' => 'Iangaev',
+        ];
+
+        $this->assertSame($expectedJson, $resource->toArray(request()));
     }
 }
