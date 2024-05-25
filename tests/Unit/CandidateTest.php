@@ -14,6 +14,7 @@ class CandidateTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** @var array<mixed> */
     private array $seedCandidate;
     private Candidate $candidate;
 
@@ -21,9 +22,9 @@ class CandidateTest extends TestCase
     {
         parent::setUp();
         $this->seedCandidate = [
-			'name' => (new Name('Maxim'))->display(),
+            'name' => (new Name('Maxim'))->display(),
             'surname' => (new Surname('Iangaev'))->display(),
-		];
+        ];
         $this->candidate = Candidate::factory()->create($this->seedCandidate);
     }
 
