@@ -79,4 +79,14 @@ class CandidateTest  extends TestCase
                 'end_date' => $mission['end_date'],
             ]);
     }
+
+    public function test_can_delete_candidate(): void
+    {
+        $candidate = Candidate::factory()->create();
+
+        $response = $this->deleteJson('/api/candidates/'.$candidate->id);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing('candidates', ['id' => $candidate->id]);
+    }
 }

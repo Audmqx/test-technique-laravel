@@ -49,7 +49,7 @@ describe('CandidatesList', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('No candidates found')).toBeInTheDocument();
+      expect(screen.getByText('Veuillez ajouter des candidats')).toBeInTheDocument();
     });
   });
 });
