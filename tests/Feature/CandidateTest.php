@@ -7,10 +7,31 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\Candidate;
 use Illuminate\Testing\TestResponse;
+use Domain\Candidate\ValueObjects\{Name, Surname};
 
 class CandidateTest  extends TestCase
 {
     use RefreshDatabase;
+
+    /** @var array<mixed> */
+    private array $seedCandidate;
+    private Candidate $candidate;
+  
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->seedCandidate = [
+            'name' => (new Name('Maxim'))->display(),
+            'surname' => (new Surname('Iangaev'))->display(),
+        ];
+        $this->candidate = Candidate::factory()->create($this->seedCandidate);
+    }
+
+    public function test_that_candidate_model_and_table_exist(): void
+    {
+        $this->assertModelExists($this->candidate);
+        $this->assertDatabaseHas('candidates', $this->seedCandidate);
+    }
 
     public function test_that_it_returns_a_list_of_candidates(): void
     {

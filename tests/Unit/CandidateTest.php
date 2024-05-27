@@ -28,12 +28,6 @@ class CandidateTest extends TestCase
         $this->candidate = Candidate::factory()->create($this->seedCandidate);
     }
 
-    public function test_that_candidate_model_and_table_exist(): void
-    {
-        $this->assertModelExists($this->candidate);
-        $this->assertDatabaseHas('candidates', $this->seedCandidate);
-    }
-
     /** @phpstan-ignore-next-line */
     public static function invalidNames(): array
     {
