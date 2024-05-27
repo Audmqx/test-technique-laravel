@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
+use App\Monads\Maybe;
 
 class CandidateResource extends JsonResource
 {
@@ -20,7 +22,11 @@ class CandidateResource extends JsonResource
             /** @phpstan-ignore-next-line */
             'name' => $this->name,
             /** @phpstan-ignore-next-line */
-            'surname' => $this->surname
+            'surname' => $this->surname,
+            /** @phpstan-ignore-next-line */
+            'current_mission' => Maybe::just($this->missions()->where('end_date', '>=', Carbon::now())->first())->getOrElse('-'),
+            /** @phpstan-ignore-next-line */
+            'total_missions' => $this->missions()->count()
         ];
     }
 }

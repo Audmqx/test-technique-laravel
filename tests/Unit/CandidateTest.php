@@ -62,6 +62,8 @@ class CandidateTest extends TestCase
             'id' => $this->candidate->id,
             'name' => 'Maxim',
             'surname' => 'Iangaev',
+            'current_mission' => '-',
+            'total_missions' => 0
         ];
 
         $this->assertSame($expectedJson, $resource->toArray(request()));
