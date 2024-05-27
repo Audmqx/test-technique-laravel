@@ -1,19 +1,17 @@
-import './bootstrap';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import CandidatesList from './components/CandidatesList/CandidatesList';
 
-import ReactDOM from 'react-dom/client';        
+const queryClient = new QueryClient();
 
 const App = (): JSX.Element => {
-    return (
-      <div>
-        <h1>Gestion des candidats</h1>
-      </div>
-    );
-  };
+  return (
+      <QueryClientProvider client={queryClient}>
+          <CandidatesList />
+      </QueryClientProvider>
+  );
+};
 
-
-const rootElement = document.getElementById('app');
-
-if (rootElement) {
-    const root = ReactDOM.createRoot(rootElement);
-    root.render(<App />);
-}
+const root = ReactDOM.createRoot(document.getElementById('app')!);
+root.render(<App />);
