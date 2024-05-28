@@ -1,0 +1,96 @@
+body {
+    background-color: #f5f5f5;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .candidates-container {
+    padding: 40px;
+    max-width: 1200px;
+    margin: auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    font-weight: 300;
+  }
+  
+  .filter-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  
+  .filter-section input[type="date"] {
+    padding: 8px 12px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+  }
+  
+  .filter-section input[type="date"]:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+  }
+  
+  .filter-section button {
+    padding: 8px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  
+  .candidates-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin: 20px 0;
+    font-size: 1em;
+  }
+  
+  .candidates-table th,
+  .candidates-table td {
+    padding: 15px 20px;
+    text-align: left;
+  }
+  
+  .candidates-table th {
+    background-color: #3498db;
+    color: white;
+    font-weight: 500;
+    border: none;
+  }
+  
+  .candidates-table td {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  button[data-testid="delete-button"] {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  

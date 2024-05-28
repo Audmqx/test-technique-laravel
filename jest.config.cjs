@@ -1,4 +1,5 @@
 module.exports = {
+  testEnvironment: 'node',
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
   transform: {
