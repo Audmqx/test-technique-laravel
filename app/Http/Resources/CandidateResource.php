@@ -24,7 +24,7 @@ class CandidateResource extends JsonResource
             /** @phpstan-ignore-next-line */
             'surname' => $this->surname,
             /** @phpstan-ignore-next-line */
-            'current_mission' => Maybe::just($this->missions()->where('end_date', '>=', Carbon::now())->first())->getOrElse('-'),
+            'current_mission' => Maybe::just($this->missions()->where('start_date', '<=', Carbon::now())->where('end_date', '>=', Carbon::now())->first())->getOrElse('-'),
             /** @phpstan-ignore-next-line */
             'total_missions' => $this->missions()->count()
         ];

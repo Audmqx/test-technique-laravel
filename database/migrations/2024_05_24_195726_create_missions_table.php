@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('missions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('candidate_id')->nullable();;
-            $table->foreign('candidate_id')->references('id')->on('candidates');
+            $table->unsignedBigInteger('candidate_id')->nullable();
+            $table->foreign('candidate_id')->references('id')->on('candidates')->onDelete('cascade');
             $table->string('title');
             $table->date('start_date');
             $table->date('end_date');
