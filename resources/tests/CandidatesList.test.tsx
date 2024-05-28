@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'; // Importer userEvent
 import axios from 'axios';
 import CandidatesList from '../js/components/CandidatesList/CandidatesList';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -8,8 +9,8 @@ import { candidatesData } from './CandidatesData';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-
 const queryClient = new QueryClient();
+const FIRST_ELEMENT = 0;
 
 describe('CandidatesList', () => {
   test('renders candidates list', async () => {
@@ -51,5 +52,33 @@ describe('CandidatesList', () => {
     await waitFor(() => {
       expect(screen.getByText('Veuillez ajouter des candidats')).toBeInTheDocument();
     });
+  });
+
+  test('can delete a candidate', async () => {
+       mockedAxios.get.mockResolvedValueOnce({
+        data: {
+          data: candidatesData
+        },
+      });
+
+      mockedAxios.delete.mockResolvedValueOnce(undefined);
+  
+      render(
+        <QueryClientProvider client={queryClient}>
+          <CandidatesList />
+        </QueryClientProvider>
+      );
+  
+      const margaretElement = await screen.findByText(/Margaret\s+Sauvage/);
+      expect(margaretElement).toBeInTheDocument();
+  
+      const deleteButtons = document.querySelectorAll('button[data-testid="delete-button"]');
+      userEvent.click(deleteButtons[FIRST_ELEMENT]);
+  
+      await waitFor(() => {
+        expect(screen.queryByText(/Margaret\s+Sauvage/)).not.toBeInTheDocument();
+      });
+  
+      expect(mockedAxios.delete).toHaveBeenCalledWith('/api/candidates/1');
   });
 });
