@@ -8,6 +8,7 @@ use Tests\TestCase;
 use App\Models\Candidate;
 use Illuminate\Testing\TestResponse;
 use Domain\Candidate\ValueObjects\{Name, Surname};
+use Illuminate\Support\Carbon;
 
 class CandidateTest  extends TestCase
 {
@@ -88,5 +89,28 @@ class CandidateTest  extends TestCase
 
         $response->assertStatus(200);
         $this->assertDatabaseMissing('candidates', ['id' => $candidate->id]);
+    }
+
+    public function test_that_it_returns_candidates_with_mission_ending_on_a_specific_date(): void
+    {
+        $candidateWithMissionEndingToday = Candidate::factory()
+            ->hasMissions(1, ['end_date' => Carbon::today()])
+            ->create();
+
+        $candidateWithMissionEndingTomorrow = Candidate::factory()
+            ->hasMissions(1, ['end_date' => Carbon::tomorrow()])
+            ->create();
+
+        $response = $this->getJson('/api/candidates?end_date=' . Carbon::today()->toDateString());
+
+        $response->assertStatus(200);
+
+        $response->assertJsonFragment([
+            'id' => $candidateWithMissionEndingToday->id,
+        ]);
+
+        $response->assertJsonMissing([
+            'id' => $candidateWithMissionEndingTomorrow->id,
+        ]);
     }
 }

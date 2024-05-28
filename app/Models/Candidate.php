@@ -19,16 +19,17 @@ class Candidate extends Model
         return self::WhereDoesntHave('missions')->inRandomOrder()->first();
     }
 
+
     /**
+     * @param Carbon $date
      * @return Collection<int, Candidate>
      */
-    public static function WithoutActiveMissions(): Collection
+    public static function withMissionEndingOn(Carbon $date): Collection
     {
-        return self::whereDoesntHave('missions', function (Builder $query) {
-            $query->where('end_date', '>=', Carbon::now());
+        return self::whereHas('missions', function (Builder $query) use ($date) {
+            $query->whereDate('end_date', '=', $date);
         })->get();
     }
-
 
     /**
      * @return HasMany<Mission>
